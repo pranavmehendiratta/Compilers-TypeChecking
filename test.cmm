@@ -1,0 +1,58 @@
+struct P {
+    int x;
+    int y;
+};
+
+void func() {
+    struct P point;
+    int a;
+    bool b;
+    cout << a;
+    cout << b;
+    cout << point; // Should throw an error
+    cin >> a;
+    cin >> b;
+    cin >> point; // Should throw an error
+    
+    if (b) {
+	cout << a;
+	cout << b;
+    }
+
+    if (b >= 3) {
+	cout << a;
+	cout << b;
+    }
+   
+    if (b) {
+	cout << a;
+	cout << b;
+	cout << point; // Should throw an error
+    } else {
+	cout << a;
+	cout << b;
+	cout << point; // Should throw an error
+    }
+
+    while (b) {
+	cout << a;
+	cout << b;
+    }
+
+    while (b >= 3) {
+	cout << a;
+	cout << b;
+    }
+    
+    repeat (a) {
+	cout << a;
+	cout << b;
+    }
+
+    repeat (b) {
+	cout << a;
+	cout << b;
+    }
+    a++;
+    b++; // incrementing bool
+}
