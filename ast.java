@@ -353,7 +353,11 @@ class ExpListNode extends ASTnode {
 	System.out.println("--- Inside ExpListNode typeCheck ---");
 	return true;
     }
-    
+
+    public List<ExpNode> getList() {
+	return myExps;
+    }
+
     public void unparse(PrintWriter p, int indent) {
         Iterator<ExpNode> it = myExps.iterator();
         if (it.hasNext()) { // if there is at least one element
@@ -1359,7 +1363,14 @@ class CallStmtNode extends StmtNode {
 
     public boolean typeCheck(TypeNode returnType) {
 	System.out.println("--- Inside CallStmtNode typeCheck ---");
-	return true;
+	Type type = myCall.typeCheck();
+	boolean rtc = true;
+	
+	if (type instanceof ErrorType) {
+	    rtc = false;
+	}
+
+	return rtc;
     }
     
     // 1 kid
@@ -1384,7 +1395,35 @@ class ReturnStmtNode extends StmtNode {
 
     public boolean typeCheck(TypeNode returnType) {
 	System.out.println("--- Inside ReturnStmtNode typeCheck ---");
-	return true;
+	Type rType = returnType.type(); 
+	boolean rtc = true;
+
+	// Checking if the return statement is empty
+	if (myExp == null) {
+	    if (!(rType instanceof VoidType)) {
+		ErrMsg.fatal(0, 0, "Missing return value");
+		rtc = false;
+	    }
+	} else { // Otherwise
+	    Type type = myExp.typeCheck();
+	    IdNode idnode = myExp.getIdNode();
+	    if (rType instanceof VoidType) {
+		idnode.setIdNodeError("Return with a value in a void function");
+		rtc = false;
+	    } else if (type instanceof ErrorType) {
+		rtc = false;
+	    } else {
+		// Checking the type of function and return type
+		if (type.toString().equals(rType.toString())) {
+		    rtc = true;
+		} else {
+		    idnode.setIdNodeError("Bad return value");
+		    rtc = false;
+		}
+	    }
+	}
+
+	return rtc;
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -1794,7 +1833,43 @@ class AssignNode extends ExpNode {
     
     public Type typeCheck() {
 	System.out.println("--- Inside AssignNode typeCheck ---");
-	return new IntType(); // TODO change this
+	Type lType = myLhs.typeCheck();
+	Type rType = myExp.typeCheck();
+	IdNode idnode = myLhs.getIdNode();
+	boolean rtc = true;
+
+	if (lType instanceof FnType && rType instanceof FnType) {
+	    idnode.setIdNodeError("Function assignment");
+	    rtc = false;
+	    return new ErrorType();
+	}
+
+	if (lType instanceof StructDefType && rType instanceof StructDefType) {
+	    idnode.setIdNodeError("Struct name assignment");
+	    rtc = false;
+	    return new ErrorType();
+	}
+	
+	if (lType instanceof StructType && rType instanceof StructType) {
+	    idnode.setIdNodeError("Struct variable assignment");
+	    rtc = false;
+	    return new ErrorType();
+	}
+	
+	if (lType instanceof ErrorType || rType instanceof ErrorType) {
+	    rtc = false;
+	    return new ErrorType();
+	} else {
+	    if (lType.toString().equals(rType.toString())) {
+		rtc = true;
+		return lType; // Can return either lType or rType
+	    } else {
+		idnode.setIdNodeError("Type mismatch");
+		rtc = false;
+		return new ErrorType();
+	    }
+	}
+
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -1827,7 +1902,49 @@ class CallExpNode extends ExpNode {
 
     public Type typeCheck() {
 	System.out.println("--- Inside CallExpNode typeCheck ---");
-	return new IntType(); //  Place holder
+	
+	// Getting the type of the function
+	Type type = myId.sym().getType();
+	boolean rtc = true;
+
+	// Checking if id is a valid function
+	if (!(type instanceof FnType)) {
+	    myId.setIdNodeError("Attempt to call a non-function");
+	    rtc = false;
+	} else { // valid function found
+	    // Getting the params for this function from sym table
+	    List<Type> paramsList = ((FnSym)(myId.sym())).getParamTypes();
+	    List<ExpNode> expList = myExpList.getList();
+
+	    System.out.println("size of explist: " + expList.size());
+	    System.out.println("size of params: " + paramsList.size());
+	    
+	    // Checking if the # of args are same
+	    if (expList.size() != paramsList.size()) {
+		rtc = false;
+		myId.setIdNodeError("Function call with wrong number of args");
+	    } else { // args are same
+		for (int i = 0; i < expList.size(); i++) {
+		    //System.out.println("param: " + paramsList.get(i).toString() + " exp: " + expList.get(i).typeCheck().toString());
+		    String param = paramsList.get(i).toString();
+		    String formal = expList.get(i).typeCheck().toString();
+		    if (!param.equals(formal)) {
+			IdNode idnode = expList.get(i).getIdNode();
+			idnode.setIdNodeError("Type of actual does not match type of formal");
+			rtc = false;
+		    }
+		}
+
+	    }
+
+	}
+
+	// Returning the correct type
+	if (rtc) {
+	    return ((FnSym)(myId.sym())).getReturnType();
+	} else {
+	    return new ErrorType();
+	}
     }
     
     /**
@@ -1877,10 +1994,6 @@ abstract class UnaryExpNode extends ExpNode {
 	return myExp.getIdNode();
     }
    
-    public Type typeCheck() {
-	return new IntType(); // Placeholder
-    }
-
     // one child
     protected ExpNode myExp;
 }
@@ -2105,7 +2218,26 @@ class UnaryMinusNode extends UnaryExpNode {
 
     public Type typeCheck() {
 	System.out.println("--- Inside UnaryMinusNode typeCheck ---");
-	return new IntType(); // Placeholder
+	Type type = myExp.typeCheck();
+	IdNode idnode = myExp.getIdNode();
+	boolean rtc = true;
+
+	// Checking the type of myexp - should be int
+	if (type instanceof ErrorType) {
+	    rtc = false;
+	} else {
+	    if (!(type instanceof IntType)) {
+		idnode.setIdNodeError("Arithmetic operator applied to non-numeric operand");
+		rtc = false;
+	    }
+	}
+
+	// Returning the correct type
+	if (rtc) {
+	    return new IntType(); 
+	} else {
+	    return new ErrorType();
+	}
     }
     
     public void unparse(PrintWriter p, int indent) {
@@ -2122,9 +2254,28 @@ class NotNode extends UnaryExpNode {
 
     public Type typeCheck() {
 	System.out.println("--- Inside NotNode typeCheck ---");
-	return new BoolType();// Placeholder
+	Type type = myExp.typeCheck();
+	IdNode idnode = myExp.getIdNode();
+	boolean rtc = true;
+
+	// Checking the type of myexp - should be int
+	if (type instanceof ErrorType) {
+	    rtc = false;
+	} else {
+	    if (!(type instanceof BoolType)) {
+		idnode.setIdNodeError("Logical operator applied to non-bool operand");
+		rtc = false;
+	    }
+	}
+
+	// Returning the correct type
+	if (rtc) {
+	    return new BoolType(); 
+	} else {
+	    return new ErrorType();
+	}
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(!");
         myExp.unparse(p, 0);

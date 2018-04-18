@@ -3,6 +3,11 @@ struct P{
     int y;
 };
 
+struct P1{
+    int x;
+    int y;
+};
+
 void func() {
     struct P point;
     int a;
@@ -49,5 +54,33 @@ void func() {
     }
     a(int)++;
     b(bool)++;
+    return;
+    return a(int);
+}
+
+int f1() {
+    int a;
+    return a(int);
+}
+
+int f3(int x, int y) {
+    cout << x(int);
+}
+
+int f2() {
+    bool b;
+    int a;
+    int c;
+    struct P point1;
+    struct P1 point2;
+    b(bool) = true;
+    a(int) = 1;
+    a(int) = b(bool);
+    f1(->int) = func(->void);
+    P(struct) = P1(struct);
+    point1(P) = point2(P1);
+    f3(int,int->int)(a(int), b(bool));
+    cout << (a(int) + b(bool));
+    return b(bool);
 }
 
