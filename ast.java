@@ -141,7 +141,7 @@ class ProgramNode extends ASTnode {
      */
     public boolean typeCheck() {
 	// TODO: Implement a type checking method for this node and its children.
-	System.out.println("--- Inside ProgramNode typeCheck ---");
+	//System.out.println("--- Inside ProgramNode typeCheck ---");
 	return myDeclList.typeCheck();
     }
     
@@ -167,20 +167,25 @@ class DeclListNode extends ASTnode {
     }
    
     public boolean typeCheck() {
-	System.out.println("--- Inside DeclListNode typeCheck ---");
+	//System.out.println("--- Inside DeclListNode typeCheck ---");
         boolean rtc = true;
+	boolean result = true;
 	for (DeclNode node : myDecls) {
             if (node instanceof VarDeclNode) {
                 //rtc = ((VarDeclNode)node).typeCheck();
             } else if (node instanceof FnDeclNode) {
                 rtc = ((FnDeclNode)node).typeCheck();
+		if(rtc == false){
+		result = rtc;
+		}
             } 
 	    // TODO: Add conditon for structs 
 	    //else {
 	    //	rtc = ((StructDeclNode)node).typeCheck();
 	    //}
         }
-	return rtc;
+	//return rtc;
+	return result;
     }
 
 
@@ -279,7 +284,7 @@ class FnBodyNode extends ASTnode {
     }    
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside FnBodyNode typeCheck ---");
+	//System.out.println("--- Inside FnBodyNode typeCheck ---");
 	// vardecl list does not need to type checked because those
 	// are declarations
 	
@@ -313,7 +318,7 @@ class StmtListNode extends ASTnode {
     }    
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside StmtListNode typeCheck ---");
+	//System.out.println("--- Inside StmtListNode typeCheck ---");
         boolean rtc = true;
 	for (StmtNode node : myStmts) {
             rtc = node.typeCheck(returnType);
@@ -350,7 +355,7 @@ class ExpListNode extends ASTnode {
     
     // TODO: Delete we probably don't need this
     public boolean typeCheck() {
-	System.out.println("--- Inside ExpListNode typeCheck ---");
+	//System.out.println("--- Inside ExpListNode typeCheck ---");
 	return true;
     }
 
@@ -563,7 +568,7 @@ class FnDeclNode extends DeclNode {
     }    
     
     public boolean typeCheck() {
-	System.out.println("--- Inside FnDeclNode typeCheck ---");
+	//System.out.println("--- Inside FnDeclNode typeCheck ---");
 	
 	// Getting the return type of the function.
 	// This will be used later when type analysis on
@@ -647,7 +652,7 @@ class FormalDeclNode extends DeclNode {
    
     // TODO: Delete probablu don't need this because a declatation
     public boolean typeCheck() {
-	System.out.println("--- Inside FormalDeclNode typeCheck ---");
+	//System.out.println("--- Inside FormalDeclNode typeCheck ---");
 	return true;
     }
     
@@ -718,7 +723,7 @@ class StructDeclNode extends DeclNode {
    
     // TODO: Delete this becuase we probably don't need this
     public boolean typeCheck() {
-	System.out.println("--- Inside StructDeclNode typeCheck ---");
+	//System.out.println("--- Inside StructDeclNode typeCheck ---");
 	return true;
     }
     
@@ -849,7 +854,7 @@ class AssignStmtNode extends StmtNode {
     }
 
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside AssignStmtNode typeCheck ---");
+	//System.out.println("--- Inside AssignStmtNode typeCheck ---");
 	Type type = myAssign.typeCheck();
 	boolean rtc = true;
 	
@@ -878,7 +883,7 @@ class PostIncStmtNode extends StmtNode {
     }
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside PostIncStmtNode typeCheck ---");
+	//System.out.println("--- Inside PostIncStmtNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -917,7 +922,7 @@ class PostDecStmtNode extends StmtNode {
     }
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside PostDecStmtNode typeCheck ---");
+	//System.out.println("--- Inside PostDecStmtNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -956,7 +961,7 @@ class ReadStmtNode extends StmtNode {
     }    
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside ReadStmtNode typeCheck ---");
+	//System.out.println("--- Inside ReadStmtNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -1012,7 +1017,7 @@ class WriteStmtNode extends StmtNode {
     }
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside WriteStmtNode typeCheck ---");
+	//System.out.println("--- Inside WriteStmtNode typeCheck ---");
 	
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
@@ -1091,7 +1096,7 @@ class IfStmtNode extends StmtNode {
     }
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside IfStmtNode typeCheck ---");
+	//System.out.println("--- Inside IfStmtNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
     	
@@ -1174,7 +1179,7 @@ class IfElseStmtNode extends StmtNode {
     }
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside IfElseStmtNode typeCheck ---");
+	//System.out.println("--- Inside IfElseStmtNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -1247,7 +1252,7 @@ class WhileStmtNode extends StmtNode {
     }
     
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside WhileStmtNode typeCheck ---");
+	//System.out.println("--- Inside WhileStmtNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -1309,9 +1314,13 @@ class RepeatStmtNode extends StmtNode {
     }
 
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside RepeatStmtNode typeCheck ---");
-	Type type = myExp.typeCheck();
+	//System.out.println("--- Inside RepeatStmtNode typeCheck ---");
 	IdNode idnode = myExp.getIdNode();
+	
+	//System.out.println(idnode);
+	
+	Type type = myExp.typeCheck();
+	
 	boolean rtc = true;
 
 	if (type instanceof ErrorType) {
@@ -1362,7 +1371,7 @@ class CallStmtNode extends StmtNode {
     }
 
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside CallStmtNode typeCheck ---");
+	//System.out.println("--- Inside CallStmtNode typeCheck ---");
 	Type type = myCall.typeCheck();
 	boolean rtc = true;
 	
@@ -1394,7 +1403,7 @@ class ReturnStmtNode extends StmtNode {
     }
 
     public boolean typeCheck(TypeNode returnType) {
-	System.out.println("--- Inside ReturnStmtNode typeCheck ---");
+	//System.out.println("--- Inside ReturnStmtNode typeCheck ---");
 	Type rType = returnType.type(); 
 	boolean rtc = true;
 
@@ -1470,7 +1479,7 @@ class IntLitNode extends ExpNode {
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside IntLitNode typeCheck ---");
+	//System.out.println("--- Inside IntLitNode typeCheck ---");
 	return new IntType();
     }
    
@@ -1502,7 +1511,7 @@ class StringLitNode extends ExpNode {
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside StringLitNode typeCheck ---");
+	//System.out.println("--- Inside StringLitNode typeCheck ---");
 	return new StringType();
     }
     
@@ -1533,7 +1542,7 @@ class TrueNode extends ExpNode {
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside TrueNode typeCheck ---");
+	//System.out.println("--- Inside TrueNode typeCheck ---");
 	return new BoolType();
     }
     
@@ -1563,7 +1572,7 @@ class FalseNode extends ExpNode {
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside FalseNode typeCheck ---");
+	//System.out.println("--- Inside FalseNode typeCheck ---");
 	return new BoolType();
     }
     
@@ -1597,48 +1606,57 @@ class IdNode extends ExpNode {
     }
     
     public Type typeCheck() {
-	System.out.println("--- Inside IdNode typeCheck ---");
-	return mySym.getType();
+	//System.out.println("--- Inside IdNode typeCheck ---");
+	if (mySym != null) {
+	    return mySym.getType();
+	} 
+	else {
+	    System.err.println("ID with null sym field in IdNode.typeCheck " + myLineNum);
+	    System.exit(-1);
+	}
+	return null;
+
+	//return mySym.getType();
     }
-    
+
     /**
      * Return the name of this ID.
      */
     public String name() {
-        return myStrVal;
+	return myStrVal;
     }
-    
+
     /**
      * Return the symbol associated with this ID.
      */
     public Sym sym() {
-        return mySym;
+	return mySym;
     }
-    
+
     /**
      * Return the line number for this ID.
      */
     public int lineNum() {
-        return myLineNum;
+	return myLineNum;
     }
-    
+
     /**
      * Return the char number for this ID.
      */
     public int charNum() {
-        return myCharNum;
+	return myCharNum;
     }    
-    
+
     public IdNode getIdNode() {
 	return this;
     }
-    
+
     public void setIdNodeError(String msg) {
 	// Print out the error msg on the 1st character of
 	// the given id
 	ErrMsg.fatal(myLineNum, myCharNum, msg);
     }
-    
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, do:
@@ -1646,19 +1664,19 @@ class IdNode extends ExpNode {
      * - if ok, link to symbol table entry
      */
     public void nameAnalysis(SymTable symTab) {
-        Sym sym = symTab.lookupGlobal(myStrVal);
-        if (sym == null) {
-            ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
-        } else {
-            link(sym);
-        }
+	Sym sym = symTab.lookupGlobal(myStrVal);
+	if (sym == null) {
+	    ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
+	} else {
+	    link(sym);
+	}
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print(myStrVal);
-        if (mySym != null) {
-            p.print("(" + mySym + ")");
-        }
+	p.print(myStrVal);
+	if (mySym != null) {
+	    p.print("(" + mySym + ")");
+	}
     }
 
     private int myLineNum;
@@ -1669,40 +1687,43 @@ class IdNode extends ExpNode {
 
 class DotAccessExpNode extends ExpNode {
     public DotAccessExpNode(ExpNode loc, IdNode id) {
-        myLoc = loc;    
-        myId = id;
-        mySym = null;
+	myLoc = loc;    
+	myId = id;
+	mySym = null;
     }
 
     // TODO: Structs
     public Type typeCheck() {
-	System.out.println("--- Inside DotAccessExpNode typeCheck ---");
-	return new IntType(); // Temp place holder;
+	//System.out.println("--- Inside DotAccessExpNode typeCheck ---");
+	//System.out.println(myId.name());
+	//System.out.println(myId.sym().getType()) ;
+	//return new IntType(); // Temp place holder;
+	return myId.typeCheck();
     }
-    
+
     /**
      * Return the symbol associated with this dot-access node.
      */
     public Sym sym() {
-        return mySym;
+	return mySym;
     }    
-    
+
     /**
      * Return the line number for this dot-access node. 
      * The line number is the one corresponding to the RHS of the dot-access.
      */
     public int lineNum() {
-        return myId.lineNum();
+	return myId.lineNum();
     }
-    
+
     /**
      * Return the char number for this dot-access node.
      * The char number is the one corresponding to the RHS of the dot-access.
      */
     public int charNum() {
-        return myId.charNum();
+	return myId.charNum();
     }
-    
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, do:
@@ -1713,99 +1734,99 @@ class DotAccessExpNode extends ExpNode {
      *   table for the appropriate struct definition
      */
     public void nameAnalysis(SymTable symTab) {
-        badAccess = false;
-        SymTable structSymTab = null; // to lookup RHS of dot-access
-        Sym sym = null;
-        
-        myLoc.nameAnalysis(symTab);  // do name analysis on LHS
-        
-        // if myLoc is really an ID, then sym will be a link to the ID's symbol
-        if (myLoc instanceof IdNode) {
-            IdNode id = (IdNode)myLoc;
-            sym = id.sym();
-            
-            // check ID has been declared to be of a struct type
-            
-            if (sym == null) { // ID was undeclared
-                badAccess = true;
-            }
-            else if (sym instanceof StructSym) { 
-                // get symbol table for struct type
-                Sym tempSym = ((StructSym)sym).getStructType().sym();
-                structSymTab = ((StructDefSym)tempSym).getSymTable();
-            } 
-            else {  // LHS is not a struct type
-                ErrMsg.fatal(id.lineNum(), id.charNum(), 
-                             "Dot-access of non-struct type");
-                badAccess = true;
-            }
-        }
-        
-        // if myLoc is really a dot-access (i.e., myLoc was of the form
-        // LHSloc.RHSid), then sym will either be
-        // null - indicating RHSid is not of a struct type, or
-        // a link to the Sym for the struct type RHSid was declared to be
-        else if (myLoc instanceof DotAccessExpNode) {
-            DotAccessExpNode loc = (DotAccessExpNode)myLoc;
-            
-            if (loc.badAccess) {  // if errors in processing myLoc
-                badAccess = true; // don't continue proccessing this dot-access
-            }
-            else { //  no errors in processing myLoc
-                sym = loc.sym();
+	badAccess = false;
+	SymTable structSymTab = null; // to lookup RHS of dot-access
+	Sym sym = null;
 
-                if (sym == null) {  // no struct in which to look up RHS
-                    ErrMsg.fatal(loc.lineNum(), loc.charNum(), 
-                                 "Dot-access of non-struct type");
-                    badAccess = true;
-                }
-                else {  // get the struct's symbol table in which to lookup RHS
-                    if (sym instanceof StructDefSym) {
-                        structSymTab = ((StructDefSym)sym).getSymTable();
-                    }
-                    else {
-                        System.err.println("Unexpected Sym type in DotAccessExpNode");
-                        System.exit(-1);
-                    }
-                }
-            }
+	myLoc.nameAnalysis(symTab);  // do name analysis on LHS
 
-        }
-        
-        else { // don't know what kind of thing myLoc is
-            System.err.println("Unexpected node type in LHS of dot-access");
-            System.exit(-1);
-        }
-        
-        // do name analysis on RHS of dot-access in the struct's symbol table
-        if (!badAccess) {
-        
-            sym = structSymTab.lookupGlobal(myId.name()); // lookup
-            if (sym == null) { // not found - RHS is not a valid field name
-                ErrMsg.fatal(myId.lineNum(), myId.charNum(), 
-                             "Invalid struct field name");
-                badAccess = true;
-            }
-            
-            else {
-                myId.link(sym);  // link the symbol
-                // if RHS is itself as struct type, link the symbol for its struct 
-                // type to this dot-access node (to allow chained dot-access)
-                if (sym instanceof StructSym) {
-                    mySym = ((StructSym)sym).getStructType().sym();
-                }
-            }
-        }
+	// if myLoc is really an ID, then sym will be a link to the ID's symbol
+	if (myLoc instanceof IdNode) {
+	    IdNode id = (IdNode)myLoc;
+	    sym = id.sym();
+
+	    // check ID has been declared to be of a struct type
+
+	    if (sym == null) { // ID was undeclared
+		badAccess = true;
+	    }
+	    else if (sym instanceof StructSym) { 
+		// get symbol table for struct type
+		Sym tempSym = ((StructSym)sym).getStructType().sym();
+		structSymTab = ((StructDefSym)tempSym).getSymTable();
+	    } 
+	    else {  // LHS is not a struct type
+		ErrMsg.fatal(id.lineNum(), id.charNum(), 
+			"Dot-access of non-struct type");
+		badAccess = true;
+	    }
+	}
+
+	// if myLoc is really a dot-access (i.e., myLoc was of the form
+	// LHSloc.RHSid), then sym will either be
+	// null - indicating RHSid is not of a struct type, or
+	// a link to the Sym for the struct type RHSid was declared to be
+	else if (myLoc instanceof DotAccessExpNode) {
+	    DotAccessExpNode loc = (DotAccessExpNode)myLoc;
+
+	    if (loc.badAccess) {  // if errors in processing myLoc
+		badAccess = true; // don't continue proccessing this dot-access
+	    }
+	    else { //  no errors in processing myLoc
+		sym = loc.sym();
+
+		if (sym == null) {  // no struct in which to look up RHS
+		    ErrMsg.fatal(loc.lineNum(), loc.charNum(), 
+			    "Dot-access of non-struct type");
+		    badAccess = true;
+		}
+		else {  // get the struct's symbol table in which to lookup RHS
+		    if (sym instanceof StructDefSym) {
+			structSymTab = ((StructDefSym)sym).getSymTable();
+		    }
+		    else {
+			System.err.println("Unexpected Sym type in DotAccessExpNode");
+			System.exit(-1);
+		    }
+		}
+	    }
+
+	}
+
+	else { // don't know what kind of thing myLoc is
+	    System.err.println("Unexpected node type in LHS of dot-access");
+	    System.exit(-1);
+	}
+
+	// do name analysis on RHS of dot-access in the struct's symbol table
+	if (!badAccess) {
+
+	    sym = structSymTab.lookupGlobal(myId.name()); // lookup
+	    if (sym == null) { // not found - RHS is not a valid field name
+		ErrMsg.fatal(myId.lineNum(), myId.charNum(), 
+			"Invalid struct field name");
+		badAccess = true;
+	    }
+
+	    else {
+		myId.link(sym);  // link the symbol
+		// if RHS is itself as struct type, link the symbol for its struct 
+		// type to this dot-access node (to allow chained dot-access)
+		if (sym instanceof StructSym) {
+		    mySym = ((StructSym)sym).getStructType().sym();
+		}
+	    }
+	}
     }    
-    
+
     public IdNode getIdNode() {
 	return myId;
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        myLoc.unparse(p, 0);
-        p.print(".");
-        myId.unparse(p, 0);
+	myLoc.unparse(p, 0);
+	p.print(".");
+	myId.unparse(p, 0);
     }
 
     // 2 kids
@@ -1817,8 +1838,8 @@ class DotAccessExpNode extends ExpNode {
 
 class AssignNode extends ExpNode {
     public AssignNode(ExpNode lhs, ExpNode exp) {
-        myLhs = lhs;
-        myExp = exp;
+	myLhs = lhs;
+	myExp = exp;
     }
 
     /**
@@ -1827,12 +1848,12 @@ class AssignNode extends ExpNode {
      * two children
      */
     public void nameAnalysis(SymTable symTab) {
-        myLhs.nameAnalysis(symTab);
-        myExp.nameAnalysis(symTab);
+	myLhs.nameAnalysis(symTab);
+	myExp.nameAnalysis(symTab);
     }
-    
+
     public Type typeCheck() {
-	System.out.println("--- Inside AssignNode typeCheck ---");
+	//System.out.println("--- Inside AssignNode typeCheck ---");
 	Type lType = myLhs.typeCheck();
 	Type rType = myExp.typeCheck();
 	IdNode idnode = myLhs.getIdNode();
@@ -1849,13 +1870,13 @@ class AssignNode extends ExpNode {
 	    rtc = false;
 	    return new ErrorType();
 	}
-	
+
 	if (lType instanceof StructType && rType instanceof StructType) {
 	    idnode.setIdNodeError("Struct variable assignment");
 	    rtc = false;
 	    return new ErrorType();
 	}
-	
+
 	if (lType instanceof ErrorType || rType instanceof ErrorType) {
 	    rtc = false;
 	    return new ErrorType();
@@ -1871,19 +1892,19 @@ class AssignNode extends ExpNode {
 	}
 
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        if (indent != -1)  p.print("(");
-        myLhs.unparse(p, 0);
-        p.print(" = ");
-        myExp.unparse(p, 0);
-        if (indent != -1)  p.print(")");
+	if (indent != -1)  p.print("(");
+	myLhs.unparse(p, 0);
+	p.print(" = ");
+	myExp.unparse(p, 0);
+	if (indent != -1)  p.print(")");
     }
 
     public IdNode getIdNode() {
 	return myLhs.getIdNode();
     }
-    
+
     // 2 kids
     private ExpNode myLhs;
     private ExpNode myExp;
@@ -1891,18 +1912,18 @@ class AssignNode extends ExpNode {
 
 class CallExpNode extends ExpNode {
     public CallExpNode(IdNode name, ExpListNode elist) {
-        myId = name;
-        myExpList = elist;
+	myId = name;
+	myExpList = elist;
     }
 
     public CallExpNode(IdNode name) {
-        myId = name;
-        myExpList = new ExpListNode(new LinkedList<ExpNode>());
+	myId = name;
+	myExpList = new ExpListNode(new LinkedList<ExpNode>());
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside CallExpNode typeCheck ---");
-	
+	//System.out.println("--- Inside CallExpNode typeCheck ---");
+
 	// Getting the type of the function
 	Type type = myId.sym().getType();
 	boolean rtc = true;
@@ -1916,9 +1937,9 @@ class CallExpNode extends ExpNode {
 	    List<Type> paramsList = ((FnSym)(myId.sym())).getParamTypes();
 	    List<ExpNode> expList = myExpList.getList();
 
-	    System.out.println("size of explist: " + expList.size());
-	    System.out.println("size of params: " + paramsList.size());
-	    
+	    //System.out.println("size of explist: " + expList.size());
+	    //System.out.println("size of params: " + paramsList.size());
+
 	    // Checking if the # of args are same
 	    if (expList.size() != paramsList.size()) {
 		rtc = false;
@@ -1946,30 +1967,30 @@ class CallExpNode extends ExpNode {
 	    return new ErrorType();
 	}
     }
-    
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's 
      * two children
      */
     public void nameAnalysis(SymTable symTab) {
-        myId.nameAnalysis(symTab);
-        myExpList.nameAnalysis(symTab);
+	myId.nameAnalysis(symTab);
+	myExpList.nameAnalysis(symTab);
     }    
-    
+
     public IdNode getIdNode() {
 	return myId;
     }
-    
-    
+
+
     // ** unparse **
     public void unparse(PrintWriter p, int indent) {
-        myId.unparse(p, 0);
-        p.print("(");
-        if (myExpList != null) {
-            myExpList.unparse(p, 0);
-        }
-        p.print(")");
+	myId.unparse(p, 0);
+	p.print("(");
+	if (myExpList != null) {
+	    myExpList.unparse(p, 0);
+	}
+	p.print(")");
     }
 
     // 2 kids
@@ -1979,7 +2000,7 @@ class CallExpNode extends ExpNode {
 
 abstract class UnaryExpNode extends ExpNode {
     public UnaryExpNode(ExpNode exp) {
-        myExp = exp;
+	myExp = exp;
     }
 
     /**
@@ -1987,21 +2008,21 @@ abstract class UnaryExpNode extends ExpNode {
      * Given a symbol table symTab, perform name analysis on this node's child
      */
     public void nameAnalysis(SymTable symTab) {
-        myExp.nameAnalysis(symTab);
+	myExp.nameAnalysis(symTab);
     }
-    
+
     public IdNode getIdNode() {
 	return myExp.getIdNode();
     }
-   
+
     // one child
     protected ExpNode myExp;
 }
 
 abstract class BinaryExpNode extends ExpNode {
     public BinaryExpNode(ExpNode exp1, ExpNode exp2) {
-        myExp1 = exp1;
-        myExp2 = exp2;
+	myExp1 = exp1;
+	myExp2 = exp2;
     }
 
     /**
@@ -2010,19 +2031,21 @@ abstract class BinaryExpNode extends ExpNode {
      * two children
      */
     public void nameAnalysis(SymTable symTab) {
-        myExp1.nameAnalysis(symTab);
-        myExp2.nameAnalysis(symTab);
+	myExp1.nameAnalysis(symTab);
+	myExp2.nameAnalysis(symTab);
     }
-   
+
     public IdNode getIdNode() {
 	return myExp1.getIdNode();
     }
-    
+
     public Type checkInEqualities(ExpNode l, ExpNode r) {
 	Type lType = l.typeCheck();
 	Type rType = r.typeCheck();		
 	boolean rtc = true;
-	
+
+	//System.out.println("Inside checkInequalities\n");
+
 	// Check lhs
 	if (lType instanceof ErrorType) {
 	    // Error for this will be handled where this is set
@@ -2038,7 +2061,7 @@ abstract class BinaryExpNode extends ExpNode {
 		rtc = false;
 	    }
 	}
-    
+
 	// Check rhs
 	if (rType instanceof ErrorType) {
 	    // Error for this will be handled where this is set
@@ -2067,7 +2090,7 @@ abstract class BinaryExpNode extends ExpNode {
 	Type lType = l.typeCheck();
 	Type rType = r.typeCheck();		
 	boolean rtc = true;
-	
+
 	// Check lhs
 	if (lType instanceof ErrorType) {
 	    // Error for this will be handled where this is set
@@ -2083,7 +2106,7 @@ abstract class BinaryExpNode extends ExpNode {
 		rtc = false;
 	    }
 	}
-    
+
 	// Check rhs
 	if (rType instanceof ErrorType) {
 	    // Error for this will be handled where this is set
@@ -2112,7 +2135,7 @@ abstract class BinaryExpNode extends ExpNode {
 	Type lType = l.typeCheck();
 	Type rType = r.typeCheck();		
 	boolean rtc = true;
-	
+
 	// Check lhs
 	if (lType instanceof ErrorType) {
 	    // Error for this will be handled where this is set
@@ -2128,7 +2151,7 @@ abstract class BinaryExpNode extends ExpNode {
 		rtc = false;
 	    }
 	}
-    
+
 	// Check rhs
 	if (rType instanceof ErrorType) {
 	    // Error for this will be handled where this is set
@@ -2161,7 +2184,7 @@ abstract class BinaryExpNode extends ExpNode {
 
 	// TODO: Can be || because either operand being void is wrong
 	// But the documentation say both should be void
-	
+
 	// Void condition
 	if (lType instanceof VoidType && rType instanceof VoidType) {
 	    idnode.setIdNodeError("Equality operator applied to void functions");
@@ -2173,7 +2196,7 @@ abstract class BinaryExpNode extends ExpNode {
 	    idnode.setIdNodeError("Equality operator applied to functions");
 	    rtc = false;
 	}
-	
+
 	// Struct Names
 	if (lType instanceof StructDefType && rType instanceof StructDefType) {
 	    idnode.setIdNodeError("Equality operator applied to struct names");
@@ -2213,11 +2236,11 @@ abstract class BinaryExpNode extends ExpNode {
 
 class UnaryMinusNode extends UnaryExpNode {
     public UnaryMinusNode(ExpNode exp) {
-        super(exp);
+	super(exp);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside UnaryMinusNode typeCheck ---");
+	//System.out.println("--- Inside UnaryMinusNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -2239,21 +2262,21 @@ class UnaryMinusNode extends UnaryExpNode {
 	    return new ErrorType();
 	}
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(-");
-        myExp.unparse(p, 0);
-        p.print(")");
+	p.print("(-");
+	myExp.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class NotNode extends UnaryExpNode {
     public NotNode(ExpNode exp) {
-        super(exp);
+	super(exp);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside NotNode typeCheck ---");
+	//System.out.println("--- Inside NotNode typeCheck ---");
 	Type type = myExp.typeCheck();
 	IdNode idnode = myExp.getIdNode();
 	boolean rtc = true;
@@ -2277,9 +2300,9 @@ class NotNode extends UnaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-        p.print("(!");
-        myExp.unparse(p, 0);
-        p.print(")");
+	p.print("(!");
+	myExp.unparse(p, 0);
+	p.print(")");
     }
 }
 
@@ -2289,228 +2312,234 @@ class NotNode extends UnaryExpNode {
 
 class PlusNode extends BinaryExpNode {
     public PlusNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside PlusNode typeCheck ---");
+	//System.out.println("--- Inside PlusNode typeCheck ---");
 	return checkMathOperators(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" + ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" + ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class MinusNode extends BinaryExpNode {
     public MinusNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside MinusNode typeCheck ---");
+	//System.out.println("--- Inside MinusNode typeCheck ---");
 	return checkMathOperators(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" - ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" - ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class TimesNode extends BinaryExpNode {
     public TimesNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside TimesNode typeCheck ---");
+	//System.out.println("--- Inside TimesNode typeCheck ---");
 	return checkMathOperators(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" * ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" * ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class DivideNode extends BinaryExpNode {
     public DivideNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside DivideNode typeCheck ---");
+	//System.out.println("--- Inside DivideNode typeCheck ---");
 	return checkMathOperators(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" / ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" / ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class AndNode extends BinaryExpNode {
     public AndNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
-    
+
     public Type typeCheck() {
-	System.out.println("--- Inside AndNode typeCheck ---");
+	//System.out.println("--- Inside AndNode typeCheck ---");
 	return checkBinaryBoolOp(myExp1, myExp2);
     }
 
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" && ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" && ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class OrNode extends BinaryExpNode {
     public OrNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside OrNode typeCheck ---");
+	//System.out.println("--- Inside OrNode typeCheck ---");
 	return checkBinaryBoolOp(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" || ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" || ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class EqualsNode extends BinaryExpNode {
     public EqualsNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside EqualsNode typeCheck ---");
-	return new IntType();
+	//System.out.println("--- Inside EqualsNode typeCheck ---");
+	return checkEqualsOp(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" == ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" == ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class NotEqualsNode extends BinaryExpNode {
     public NotEqualsNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside NotEqualsNode typeCheck ---");
-	return new IntType();
+	//System.out.println("--- Inside NotEqualsNode typeCheck ---");
+	//return new IntType();
+	return checkEqualsOp(myExp1, myExp2);
+
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" != ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" != ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class LessNode extends BinaryExpNode {
     public LessNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside LessNode typeCheck ---");
+	//System.out.println("--- Inside LessNode typeCheck ---");
 	return checkInEqualities(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" < ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" < ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class GreaterNode extends BinaryExpNode {
     public GreaterNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside GreaterEqNode typeCheck ---");
+	//System.out.println("--- Inside GreaterNode typeCheck ---");
+	//System.out.println(myExp1);
+	//System.out.println(myExp2);
 	return checkInEqualities(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" > ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" > ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class LessEqNode extends BinaryExpNode {
     public LessEqNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside LessEqNode typeCheck ---");
+	//System.out.println("--- Inside LessEqNode typeCheck ---");
 	return checkInEqualities(myExp1, myExp2);
     }
-    
+
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" <= ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" <= ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
 
 class GreaterEqNode extends BinaryExpNode {
     public GreaterEqNode(ExpNode exp1, ExpNode exp2) {
-        super(exp1, exp2);
+	super(exp1, exp2);
     }
 
     public Type typeCheck() {
-	System.out.println("--- Inside GreaterEqNode typeCheck ---");
+	//System.out.println("--- Inside GreaterEqNode typeCheck ---");
+	//System.out.println(myExp1);
+	//System.out.println(myExp2);
 	return checkInEqualities(myExp1, myExp2);
     }
 
     public void unparse(PrintWriter p, int indent) {
-        p.print("(");
-        myExp1.unparse(p, 0);
-        p.print(" >= ");
-        myExp2.unparse(p, 0);
-        p.print(")");
+	p.print("(");
+	myExp1.unparse(p, 0);
+	p.print(" >= ");
+	myExp2.unparse(p, 0);
+	p.print(")");
     }
 }
